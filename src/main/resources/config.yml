@@ -1,0 +1,40 @@
+wait-seconds: 60
+
+create-void-world: true
+wait-location:
+  world: deathwait_void
+  x: 0.5
+  y: 64
+  z: 0.5
+
+wait-gamemode: ADVENTURE
+return-gamemode: SURVIVAL
+fly-speed: 0.1
+
+allowed-commands:
+  - msg
+  - tell
+  - r
+
+effects:
+  lightning: true
+  spawn-sound: true
+  spawn-particles: true
+  effect-on-return: true
+
+messages:
+  waiting: "&cKamu mati! &7Kembali ke dunia dalam &e%s &7detik"
+  returned: "&aKamu sudah kembali ke dunia!"
+  command-blocked: "&cKamu tidak bisa pakai command saat menunggu."
+  no-world: "&cWorld tempat menunggu tidak ditemukan, cek config.yml"
+  admin-usage: "&e/deathwait &7<reload | list | skip <player> | time <player> <detik> | send <player> [detik]>"
+  admin-reloaded: "&aDeathWait: config direload."
+  admin-no-player: "&cPemain &f%player% &ctidak online."
+  admin-not-waiting: "&c%player% tidak sedang menunggu."
+  admin-bad-number: "&c'%s' bukan angka detik yang valid (minimal 1)."
+  admin-skipped: "&a%player% dikembalikan ke dunia."
+  admin-time-set: "&aSisa waktu %player% diubah jadi &e%s &adetik."
+  admin-sent: "&a%player% dikirim ke ruang tunggu selama &e%s &adetik."
+  admin-list-header: "&6Pemain yang sedang menunggu (%s):"
+  admin-list-entry: "&7- &f%player% &8(&e%s&8 detik)"
+  admin-list-empty: "&7Tidak ada pemain yang sedang menunggu."
