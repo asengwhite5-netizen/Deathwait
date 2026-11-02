@@ -44,7 +44,6 @@ public final class DeathWait extends JavaPlugin implements Listener, CommandExec
         tasks.clear();
     }
 
-    // ---------- void world ----------
     private void ensureVoidWorld() {
         var c = getConfig();
         if (!c.getBoolean("create-void-world", true)) return;
@@ -57,7 +56,6 @@ public final class DeathWait extends JavaPlugin implements Listener, CommandExec
         }
     }
 
-    // ---------- helpers ----------
     private Component msg(String key, String s) {
         String raw = getConfig().getString("messages." + key, key).replace("%s", s);
         return LegacyComponentSerializer.legacyAmpersand().deserialize(raw);
@@ -102,7 +100,6 @@ public final class DeathWait extends JavaPlugin implements Listener, CommandExec
         if (t != null) t.cancel();
     }
 
-    // ---------- efek ----------
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
         if (!getConfig().getBoolean("effects.lightning", true)) return;
@@ -119,7 +116,6 @@ public final class DeathWait extends JavaPlugin implements Listener, CommandExec
             l.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, l.clone().add(0, 1, 0), 80, 0.4, 0.7, 0.4, 0.4);
     }
 
-    // ---------- core ----------
     @EventHandler
     public void onRespawn(PlayerRespawnEvent e) {
         Player p = e.getPlayer();
@@ -187,10 +183,7 @@ public final class DeathWait extends JavaPlugin implements Listener, CommandExec
             if (getConfig().getBoolean("effects.effect-on-return", true)) playSpawnEffect(p);
         });
         p.sendActionBar(msg("returned", ""));
-    }
-
-    // ---------- terbang & void ----------
-    @EventHandler
+    }    @EventHandler
     public void onToggleFlight(PlayerToggleFlightEvent e) {
         if (isWaiting(e.getPlayer()) && !e.isFlying()) e.setCancelled(true);
     }
@@ -205,7 +198,6 @@ public final class DeathWait extends JavaPlugin implements Listener, CommandExec
         }
     }
 
-    // ---------- reconnect / command block ----------
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
         cancelTask(e.getPlayer().getUniqueId());
@@ -228,7 +220,6 @@ public final class DeathWait extends JavaPlugin implements Listener, CommandExec
         p.sendMessage(msg("command-blocked", ""));
     }
 
-    // ---------- /deathwait ----------
     private Component fmt(String key, String player, String value) {
         String raw = getConfig().getString("messages." + key, key)
                 .replace("%player%", player).replace("%s", value);
@@ -302,4 +293,24 @@ public final class DeathWait extends JavaPlugin implements Listener, CommandExec
                         s.sendMessage(fmt("admin-sent", t.getName(), String.valueOf(sec)));
                     }
                 }
-                               }
+            }
+            default -> s.sendMessage(fmt("admin-usage", "", ""));
+        }
+        return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender s, Command c, String l, String[] a) {
+        List<String> out = new ArrayList<>();
+        if (a.length == 1) {
+            for (String x : List.of("reload", "list", "skip", "time", "send"))
+                if (x.startsWith(a[0].toLowerCase())) out.add(x);
+        } else if (a.length == 2 && List.of("skip", "time", "send").contains(a[0].toLowerCase())) {
+            for (Player p : Bukkit.getOnlinePlayers())
+                if (p.getName().toLowerCase().startsWith(a[1].toLowerCase())) out.add(p.getName());
+        } else if (a.length == 3 && List.of("time", "send").contains(a[0].toLowerCase())) {
+            out.addAll(List.of("30", "60", "120", "300"));
+        }
+        return out;
+    }
+            }
