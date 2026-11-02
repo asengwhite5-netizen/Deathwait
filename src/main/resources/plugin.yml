@@ -1,0 +1,17 @@
+name: DeathWait
+version: '${project.version}'
+main: com.ditzzyy.deathwait.DeathWait
+api-version: '1.21.11'
+author: Ditzzyy
+description: Pemain yang mati dipindah ke alam lain dan menunggu sebelum kembali.
+commands:
+  deathwait:
+    description: Admin command DeathWait
+    usage: /deathwait <reload|list|skip|time|send>
+    permission: deathwait.admin
+permissions:
+  deathwait.admin:
+    default: op
+  deathwait.bypass:
+    description: Boleh pakai command saat menunggu
+    default: op
